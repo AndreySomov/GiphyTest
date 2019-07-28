@@ -1,1 +1,1 @@
-# GiphyTest
+This SPA based on creat-react-app. Use 'npm start' to run.
