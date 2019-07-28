@@ -1,0 +1,103 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.App{
+    overflow-x: hidden;
+    user-select: none;
+    background-color: #18181a;
+
+    .header{
+        height: 7vh;
+        box-shadow: 0 0 10px white;
+        color: white;
+        font-size: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .main{
+        position: relative;
+        width: 100vw;
+        height: 93vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+
+        .search-input{
+            position: absolute;
+            top: 50px;
+            right: 35%;
+            width: 30%;
+            height: 4vh;
+            margin: 0 auto;
+            font-size: 25px;
+        }
+
+        .giphy-logo{
+            margin: 0 auto;
+        }
+    
+        .slider{
+            height: 37vh;
+            display: flex;
+            align-items: flex-end;
+            overflow-x: hidden;
+            cursor: pointer;
+
+            .card-container{
+                position: relative;
+                min-width: 20vw;
+                height: 20vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .gif-modal-window{
+                    height: 15vh;
+                    width: 15vw;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-around;
+                    align-items: center;
+                    position: absolute;
+                    top: -16vh;
+                    font-size: 1.6vh;
+                    color: white;
+                    box-shadow: 0 0 5px white;
+                    padding: 0 25px;
+                    box-sizing: border-box;
+
+                    .source-link{
+                        color: inherit;
+                        text-decoration: none;
+
+                        &:hover{
+                            color: red;
+                        }
+                    }
+                }
+                
+                .gif-card{
+                    width: 15vw;
+                    height: 90%;
+                    border-radius: 7px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: space-around;
+                    color: white;
+                    font-size: 20px;
+
+                    .card-gif{
+                        width: 100%;
+                        height: 100%;
+                    }
+            
+                }
+            }
+        }
+    }
+}
