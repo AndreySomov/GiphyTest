@@ -1,10 +1,12 @@
 import React from 'react';
-
+import loading from '../assets/images/loading.gif';
 
 export default function LoadingText() {
   return (
-    <div className="loading-text">
-        <span>Loading...</span>
+    <div class="lds-facebook">
+      <div />
+      <div />
+      <div />
     </div>
   );
 }

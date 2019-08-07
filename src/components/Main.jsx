@@ -2,7 +2,6 @@ import React from 'react';
 import Input from './Input';
 import GifContainer from './GifContainer';
 import ErrorScreen from './ErrorScreen';
-import giphyLogo from '../assets/images/giphy.gif';
 import constants from '../constants';
 
 
@@ -85,8 +84,6 @@ export default class Main extends React.PureComponent {
         }
 
         {isConnectionErr && <ErrorScreen />}
-
-        {searchData.length === 0 && isConnectionErr && <img src={giphyLogo} alt="giphyLogo" className='giphy-logo' width='800' height='400' />}
       </div>
     );
   }
