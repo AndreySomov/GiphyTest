@@ -3,6 +3,10 @@
     padding: 0;
 }
 
+body{
+    overflow: hidden;
+}
+
 .App{
     overflow-x: hidden;
     user-select: none;
@@ -19,84 +23,114 @@
     }
 
     .main{
-        position: relative;
-        width: 100vw;
-        height: 93vh;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        align-items: center;
+        width: 100vw;
+        height: 93vh;
+        overflow-y: hidden;
 
         .search-input{
-            position: absolute;
-            top: 50px;
-            right: 35%;
             width: 30%;
-            height: 4vh;
-            margin: 0 auto;
+            height: 5vh;
+            margin: 2vh auto;
             font-size: 25px;
         }
 
         .giphy-logo{
             margin: 0 auto;
         }
-    
+
         .slider{
-            height: 37vh;
-            display: flex;
-            align-items: flex-end;
+            width: 1280px;
+            overflow: scroll;
             overflow-x: hidden;
-            cursor: pointer;
 
-            .card-container{
-                position: relative;
-                min-width: 20vw;
-                height: 20vh;
+            .card-gif{
+                margin: 5px;
+                background: linear-gradient(#e66465, #9198e5);
+            }
+
+            .loading-text{
+                width: 1000px;
+                color: white;
+                font-size: 25px;
+            }
+
+            .no-more-gifs-text{
+                width: 200px;
+                height: 150px;
                 display: flex;
-                justify-content: center;
+                justify-content: space-around;
                 align-items: center;
+                color: white;
+                font-size: 25px;
+            }
+        }
 
-                .gif-modal-window{
-                    height: 15vh;
-                    width: 15vw;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-around;
-                    align-items: center;
-                    position: absolute;
-                    top: -16vh;
-                    font-size: 1.6vh;
-                    color: white;
-                    box-shadow: 0 0 5px white;
-                    padding: 0 25px;
-                    box-sizing: border-box;
+        .no-conection-screen{
+            width: 100%;
+            height: 100%;
+            color: white;
+            font-size: 4vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+}
 
-                    .source-link{
-                        color: inherit;
-                        text-decoration: none;
+.gif-modal-window{
+    position: fixed;
+    top: 30%;
+    left: 45%;
+}
 
-                        &:hover{
-                            color: red;
-                        }
-                    }
-                }
-                
-                .gif-card{
-                    width: 15vw;
-                    height: 90%;
-                    border-radius: 7px;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: space-around;
-                    color: white;
-                    font-size: 20px;
+@media screen and (max-width: 1800px){
+    .App{
+        .main{
+            .slider{
+                width: 1080px;
+            }
+        }
+    }
+}
 
-                    .card-gif{
-                        width: 100%;
-                        height: 100%;
-                    }
-            
-                }
+@media screen and (max-width: 1500px){
+    .App{
+        .main{
+            .slider{
+                width: 880px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1200px){
+    .App{
+        .main{
+            .slider{
+                width: 660px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 770px){
+    .App{
+        .main{
+            .slider{
+                width: 440px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 360px){
+    .App{
+        .main{
+            .slider{
+                width: 230px;
             }
         }
     }
