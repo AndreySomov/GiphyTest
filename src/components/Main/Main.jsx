@@ -1,13 +1,14 @@
 import React from 'react';
-import SearchInput from './SearchInput';
-import FiltersMenu from './FiltersMenu';
-import GifContainer from './GifContainer';
-import ErrorScreen from './ErrorScreen';
-import constants from '../constants';
+import SearchInput from '../SearchInput';
+import FiltersMenu from '../FiltersMenu';
+import GifContainer from '../GifContainer';
+import ErrorScreen from '../ErrorScreen';
+import constants from '../../constants';
+import giphyRequest from '../../http/giphyRequest';
+import './main.scss'; 
 
 
 export default class Main extends React.PureComponent {
-
   constructor(props) {
     super(props);
 
@@ -18,7 +19,7 @@ export default class Main extends React.PureComponent {
       isContentOver: false,
       isConnectionErr: false,
       countValue: 40,
-      maxCountValue: 100,
+      maxCountValue: 1000,
     }
 
     this.offset = 0;
@@ -29,14 +30,36 @@ export default class Main extends React.PureComponent {
 
   handleSearchChange = async (event) => {
     const searchRequest = event.target.value;
-    const data = await this.getData(searchRequest)
 
-    this.searchRequest = searchRequest;
-    this.giphyOffset = 0;
-    this.setState({ 
-      searchData: data.data,
-      isContentOver: false,
-    });
+    if(!searchRequest){
+      clearInterval(this.timer);
+
+      this.setState({ 
+        searchData: {},
+        isContentOver: false,
+      });
+
+      this.searchRequest = searchRequest;
+      this.giphyOffset = 0;
+
+    } else {
+      clearTimeout(this.timer);
+      this.timer = setTimeout(async () => {
+    
+        if(searchRequest === this.searchRequest) return;
+
+        const data = await this.getData(searchRequest);
+
+        this.setState({ 
+          searchData: data.data,
+          isContentOver: false,
+        });
+
+        this.searchRequest = searchRequest;
+        this.giphyOffset = 0;
+
+      }, 500); 
+    }
   }
 
   handleCountChange = (event) => {
@@ -73,19 +96,17 @@ export default class Main extends React.PureComponent {
   }
 
   getData = async (request) => {
-    const { countValue } = this.state;
+    const { countValue, maxCountValue } = this.state;
     const url = `${constants.giphyDomain}.${request}&api_key=${constants.APIKey}&limit=${countValue}&offset=${this.offset}`;
 
     this.toggleGettingData();
   
-    const data = await fetch(url)
-      .then(res => res.json())
-      .catch(err => this.setState({ isConnectionErr: true }));
+    const data = await giphyRequest(url);
 
     this.toggleGettingData();
 
     this.offset += countValue;
-    this.total_count = data.pagination.total_count;
+    this.total_count = Math.min(data.pagination.total_count, maxCountValue);
 
     return data;
   }

@@ -1,9 +1,10 @@
 import React from 'react';
+import './loading.scss';
 
 
 export default function LoadingText() {
   return (
-    <div class="lds-facebook">
+    <div className="lds-facebook">
       <div />
       <div />
       <div />

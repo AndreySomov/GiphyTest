@@ -1,5 +1,6 @@
 import React from 'react';
-import constants from '../constants';
+import constants from '../../constants';
+import './gifCard.scss';
 
 
 export default function GifCard({ data, id }) {

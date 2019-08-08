@@ -1,9 +1,10 @@
 import React from 'react';
-import GifCard from './GifCard';
-import GifModalWindow from './GifModalWindow';
-import NoMoreGifs from './NoMoreGifs';
+import GifCard from '../GifCard/GifCard';
+import GifModalWindow from '../GifModalWindow/GifModalWindow';
+import NoMoreGifs from '../NoMoreGifs/NoMoreGifs';
 import key from 'weak-key';
 import Masonry from 'react-masonry-component';
+import './gifContainer.scss';
 
 
 
@@ -51,7 +52,6 @@ export default class GifContainer extends React.PureComponent {
   }
 
   handleScroll = (event) => {
-    console.log('scroll')
     const { fillSlider } = this.props;
     const slider = this.slider.current;
     const topOffset = slider.scrollHeight - slider.scrollTop;
@@ -69,7 +69,7 @@ export default class GifContainer extends React.PureComponent {
   }
 
   render() {
-    const { searchData, isGettingData, isContentOver } = this.props;
+    const { searchData, isContentOver } = this.props;
     const { isModalOpen, modalInfo } = this.state;
 
     const masonryOptions = {
@@ -80,24 +80,23 @@ export default class GifContainer extends React.PureComponent {
 
     return (
       <div
-        className="slider"
+        className="gif-container"
         onClick={ this.handleClick }
         onScroll={ this.handleScroll }
         ref={ this.slider }
       >
         <Masonry
-            className={'my-gallery-class'} // default ''
-            elementType={'ul'} // default 'div'
-            options={masonryOptions} // default {}
-            disableImagesLoaded={false} // default false
-            updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
-            imagesLoadedOptions={imagesLoadedOptions} // default {}
+            className={'my-gallery-class'}
+            elementType={'ul'}
+            options={masonryOptions}
+            disableImagesLoaded={false}
+            updateOnEachImageLoad={false}
+            imagesLoadedOptions={imagesLoadedOptions}
         >
             {!!searchData.length && 
               searchData.map((data, i) =>  
-                <li>
+                <li key={key(data)} >
                   <GifCard 
-                    key={key(data)} 
                     data={this.extractData(data)} 
                     id={i} 
                   />
@@ -105,8 +104,6 @@ export default class GifContainer extends React.PureComponent {
             }
         </Masonry>
     
-        
-
         {isContentOver && <NoMoreGifs />}
 
         {isModalOpen && 

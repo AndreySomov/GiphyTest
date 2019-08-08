@@ -1,7 +1,8 @@
 import React from 'react';
-import Loading from './Loading';
+import Loading from '../Loading/Loading';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import './searchInput.scss';
 
 
 export default function SearchInput({ handleSearchChange, isGettingData }) {

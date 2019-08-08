@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import './filtersMenu.scss';
 
 
 export default function FiltersMenu({ handleCountChange, handleMaxCountChange, countValue, maxCountValue }) {
@@ -30,7 +31,6 @@ export default function FiltersMenu({ handleCountChange, handleMaxCountChange, c
       <TextField
         id="outlined-helperText"
         label="Max gif count"
-        defaultValue="100"
         className={ classes.textField }
         margin="normal"
         variant="outlined"
@@ -41,7 +41,6 @@ export default function FiltersMenu({ handleCountChange, handleMaxCountChange, c
       <TextField
         id="outlined-helperText"
         label="Gif count"
-        defaultValue="40"
         className={ classes.textField }
         margin="normal"
         variant="outlined"

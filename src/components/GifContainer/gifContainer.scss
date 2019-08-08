@@ -1,0 +1,39 @@
+.gif-container{
+    width: 1240px;
+    height: 75vh;
+    overflow: auto;
+    position: relative;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    padding: 5px;
+}
+
+@media screen and (max-width: 1800px){
+    .gif-container{
+        width: 1080px;
+    }
+}
+
+@media screen and (max-width: 1500px){
+    .gif-container{
+        width: 880px;
+    }
+}
+
+@media screen and (max-width: 1200px){
+    .gif-container{
+        width: 660px;
+    }
+}
+
+@media screen and (max-width: 770px){
+    .gif-container{
+        width: 440px;
+    }
+}
+
+@media screen and (max-width: 360px){
+    .gif-container{
+        width: 230px;
+    }
+}
