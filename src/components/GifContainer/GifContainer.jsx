@@ -92,7 +92,7 @@ export default class GifContainer extends React.PureComponent {
             disableImagesLoaded={false}
             updateOnEachImageLoad={false}
             imagesLoadedOptions={imagesLoadedOptions}
-        >
+        >   
             {!!searchData.length && 
               searchData.map((data, i) =>  
                 <li key={key(data)} >

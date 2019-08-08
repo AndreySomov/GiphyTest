@@ -2,7 +2,6 @@ import React from 'react';
 import SearchInput from '../SearchInput';
 import FiltersMenu from '../FiltersMenu';
 import GifContainer from '../GifContainer';
-import ErrorScreen from '../ErrorScreen';
 import constants from '../../constants';
 import giphyRequest from '../../http/giphyRequest';
 import './main.scss'; 
@@ -22,7 +21,7 @@ export default class Main extends React.PureComponent {
       maxCountValue: 1000,
     }
 
-    this.offset = 0;
+    this.giphyOffset = 0;
     this.total_count = 0;
     
   }
@@ -84,7 +83,7 @@ export default class Main extends React.PureComponent {
     const newData = await this.getData(this.searchRequest);
     const newSearchData = searchData.concat(newData.data);
 
-    if(this.offset >= this.total_count) this.setState({isContentOver: true});
+    if(this.giphyOffset >= this.total_count) this.setState({isContentOver: true});
 
     this.setState({ searchData: newSearchData });
   
@@ -97,7 +96,7 @@ export default class Main extends React.PureComponent {
 
   getData = async (request) => {
     const { countValue, maxCountValue } = this.state;
-    const url = `${constants.giphyDomain}.${request}&api_key=${constants.APIKey}&limit=${countValue}&offset=${this.offset}`;
+    const url = `${constants.giphyDomain}.${request}&api_key=${constants.APIKey}&limit=${countValue}&offset=${this.giphyOffset}`;
 
     this.toggleGettingData();
   
@@ -105,7 +104,7 @@ export default class Main extends React.PureComponent {
 
     this.toggleGettingData();
 
-    this.offset += countValue;
+    this.giphyOffset += countValue;
     this.total_count = Math.min(data.pagination.total_count, maxCountValue);
 
     return data;
@@ -135,8 +134,6 @@ export default class Main extends React.PureComponent {
             isContentOver={ isContentOver }
           />
         </div>
-
-        {isConnectionErr && <ErrorScreen />}
       </div>
     );
   }
