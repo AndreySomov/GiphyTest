@@ -1,5 +1,5 @@
 import React from 'react';
-import loading from '../assets/images/loading.gif';
+
 
 export default function LoadingText() {
   return (

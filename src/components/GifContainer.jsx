@@ -1,7 +1,6 @@
 import React from 'react';
 import GifCard from './GifCard';
 import GifModalWindow from './GifModalWindow';
-import Loading from './Loading';
 import NoMoreGifs from './NoMoreGifs';
 import key from 'weak-key';
 import Masonry from 'react-masonry-component';
@@ -52,6 +51,7 @@ export default class GifContainer extends React.PureComponent {
   }
 
   handleScroll = (event) => {
+    console.log('scroll')
     const { fillSlider } = this.props;
     const slider = this.slider.current;
     const topOffset = slider.scrollHeight - slider.scrollTop;
@@ -81,9 +81,9 @@ export default class GifContainer extends React.PureComponent {
     return (
       <div
         className="slider"
-        onClick={this.handleClick}
-        onScroll={this.handleScroll}
-        ref={this.slider}
+        onClick={ this.handleClick }
+        onScroll={ this.handleScroll }
+        ref={ this.slider }
       >
         <Masonry
             className={'my-gallery-class'} // default ''
@@ -93,19 +93,19 @@ export default class GifContainer extends React.PureComponent {
             updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
             imagesLoadedOptions={imagesLoadedOptions} // default {}
         >
-            {searchData.map((data, i) =>  
-              <li>
-                <GifCard 
-                  key={key(data)} 
-                  data={this.extractData(data)} 
-                  id={i} 
-                />
-              </li> )
+            {!!searchData.length && 
+              searchData.map((data, i) =>  
+                <li>
+                  <GifCard 
+                    key={key(data)} 
+                    data={this.extractData(data)} 
+                    id={i} 
+                  />
+                </li> )
             }
         </Masonry>
     
-
-        {isGettingData && <Loading />}
+        
 
         {isContentOver && <NoMoreGifs />}
 
@@ -116,10 +116,7 @@ export default class GifContainer extends React.PureComponent {
             modalInfo={ this.extractData(modalInfo) }
           />
         }
-
-        
       </div>
-
     )
   }
 }
