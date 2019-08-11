@@ -2,8 +2,6 @@ import React from 'react';
 import SearchInput from '../SearchInput';
 import FiltersMenu from '../FiltersMenu';
 import GifContainer from '../GifContainer';
-import constants from '../../constants';
-import giphyRequest from '../../http/giphyRequest';
 import './main.scss'; 
 
 
@@ -12,106 +10,47 @@ export default class Main extends React.PureComponent {
     super(props);
 
     this.state = {
-      searchData: [],
-      modalWindowData: {},
+      searchRequest: '',
       isGettingData: false,
-      isContentOver: false,
-      isConnectionErr: false,
-      countValue: 40,
-      maxCountValue: 1000,
-    }
-
-    this.giphyOffset = 0;
-    this.total_count = 0;
-    
-  }
-
-
-  handleSearchChange = async (event) => {
-    const searchRequest = event.target.value;
-
-    if(!searchRequest){
-      clearInterval(this.timer);
-
-      this.setState({ 
-        searchData: {},
-        isContentOver: false,
-      });
-
-      this.searchRequest = searchRequest;
-      this.giphyOffset = 0;
-
-    } else {
-      clearTimeout(this.timer);
-      this.timer = setTimeout(async () => {
-    
-        if(searchRequest === this.searchRequest) return;
-
-        const data = await this.getData(searchRequest);
-
-        this.setState({ 
-          searchData: data.data,
-          isContentOver: false,
-        });
-
-        this.searchRequest = searchRequest;
-        this.giphyOffset = 0;
-
-      }, 500); 
+      // isContentOver: false,
+      // isConnectionErr: false,
+      // countValue: 40,
+      // maxCountValue: 1000,
     }
   }
 
-  handleCountChange = (event) => {
-    const value = event.target.value;
-    const count = +value.replace(/[^0-9]/, '');
 
-    this.setState({countValue: Math.max(1, count)});
-  }
-
-  handleMaxCountChange = (event) => {
-    const value = event.target.value;
-    const count = +value.replace(/[^0-9]/, '');
-
-    this.setState({maxCountValue: Math.max(1, count)});
-  }
-
-  fillSlider = async () => {
-    const { isGettingData, searchData, isContentOver } = this.state;
-
-    if(isContentOver || isGettingData) return;
-
-    const newData = await this.getData(this.searchRequest);
-    const newSearchData = searchData.concat(newData.data);
-
-    if(this.giphyOffset >= this.total_count) this.setState({isContentOver: true});
-
-    this.setState({ searchData: newSearchData });
+  handleSearchChange = (event) => {
+    const newSearchRequest = event.target.value;
+    const { searchRequest } = this.state;
   
+    clearInterval(this.timer);
+
+    this.timer = setTimeout( () => {
+    
+      if(newSearchRequest === searchRequest) return;
+
+      this.setState({ searchRequest: newSearchRequest });
+
+    }, 500);
   }
 
-  toggleGettingData = () => {
-    const { isGettingData } = this.state;
-    this.setState({ isGettingData: !isGettingData });
-  }
+  // handleCountChange = (event) => {
+  //   const value = event.target.value;
+  //   const count = +value.replace(/[^0-9]/, '');
 
-  getData = async (request) => {
-    const { countValue, maxCountValue } = this.state;
-    const url = `${constants.giphyDomain}.${request}&api_key=${constants.APIKey}&limit=${countValue}&offset=${this.giphyOffset}`;
+  //   this.setState({countValue: Math.max(1, count)});
+  // }
 
-    this.toggleGettingData();
-  
-    const data = await giphyRequest(url);
+  // handleMaxCountChange = (event) => {
+  //   const value = event.target.value;
+  //   const count = +value.replace(/[^0-9]/, '');
 
-    this.toggleGettingData();
-
-    this.giphyOffset += countValue;
-    this.total_count = Math.min(data.pagination.total_count, maxCountValue);
-
-    return data;
-  }
+  //   this.setState({maxCountValue: Math.max(1, count)});
+  // }
 
   render() {
-    const { searchData, isGettingData, isContentOver, isConnectionErr, countValue, maxCountValue } = this.state;
+    const { searchRequest, isGettingData, isContentOver, countValue, maxCountValue } = this.state;
 
     return (
       <div className="main">
@@ -120,20 +59,18 @@ export default class Main extends React.PureComponent {
           isGettingData={ isGettingData }
         />
 
-        <div className="slider-container">
-          <FiltersMenu 
-            handleCountChange={ this.handleCountChange }
-            handleMaxCountChange={ this.handleMaxCountChange }
-            countValue={ countValue }
-            maxCountValue={ maxCountValue }
-          />
+        <FiltersMenu 
+          handleCountChange={ this.handleCountChange }
+          handleMaxCountChange={ this.handleMaxCountChange }
+          countValue={ countValue }
+          maxCountValue={ maxCountValue }
+        />
 
-          <GifContainer
-            searchData={ searchData }
-            fillSlider={ this.fillSlider } 
-            isContentOver={ isContentOver }
-          />
-        </div>
+        <GifContainer
+          searchRequest={ searchRequest }
+          isContentOver={ isContentOver }
+          key={ searchRequest }
+        />
       </div>
     );
   }

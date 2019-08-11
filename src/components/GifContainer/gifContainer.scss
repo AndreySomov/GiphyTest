@@ -1,39 +1,49 @@
 .gif-container{
-    width: 1240px;
-    height: 75vh;
-    overflow: auto;
+    width: 1428px;
+    height: 77vh;
+    overflow-y: auto;
     position: relative;
-    border-left: 1px solid black;
-    border-right: 1px solid black;
     padding: 5px;
-}
 
-@media screen and (max-width: 1800px){
-    .gif-container{
-        width: 1080px;
+    &::-webkit-scrollbar{
+        width: 0;
+        height: 0;
     }
 }
 
-@media screen and (max-width: 1500px){
+@media screen and (max-width: 1300px){
     .gif-container{
-        width: 880px;
+        width: 1224px;
     }
 }
 
-@media screen and (max-width: 1200px){
+@media screen and (max-width: 1100px){
     .gif-container{
-        width: 660px;
+        width: 1020px;
+    }
+}
+
+@media screen and (max-width: 900px){
+    .gif-container{
+        width: 816px;
     }
 }
 
 @media screen and (max-width: 770px){
     .gif-container{
-        width: 440px;
+        width: 612px;
+    }
+}
+
+
+@media screen and (max-width: 500px){
+    .gif-container{
+        width: 408px;
     }
 }
 
 @media screen and (max-width: 360px){
     .gif-container{
-        width: 230px;
+        width: 204px;
     }
 }

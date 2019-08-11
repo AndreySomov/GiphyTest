@@ -1,6 +1,7 @@
 .main{
     display: flex;
     flex-direction: column;
+    justify-content: space-around;
     align-items: center;
     width: 100vw;
     height: 93vh;
@@ -11,5 +12,10 @@
         height: 100%;
         display: flex;
         justify-content: center;
+
+        &::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
     }
 }
