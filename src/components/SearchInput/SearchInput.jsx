@@ -1,39 +1,26 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
+import Loading from "../Loading";
+import { Dropdown } from 'semantic-ui-react'
 import './searchInput.scss';
 
 
-export default function SearchInput({ handleSearchChange }) {
 
-  const useStyles = makeStyles(theme => ({
-    container: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-      width: 500,
-    },
-    dense: {
-      marginTop: theme.spacing(2),
-    },
-    menu: {
-      width: 200,
-    },
-  }));
+export default function SearchInput({ handleSearchChange, isGettingData, autoCompleteValues }) {
+    const completeValues = autoCompleteValues.map(item => ({ text: item }));
 
-  const classes = useStyles();
-
-  return (
-    <TextField
-      id="outlined-full-width"
-      label="Giphy search..."
-      className={classes.textField}
-      margin="normal"
-      variant="outlined"
-      onChange={ handleSearchChange }
-    />
+  return(
+      <div className='searchInput-container'>
+          <Dropdown
+              fluid
+              multiple
+              search
+              selection
+              options={ completeValues }
+              onChange={ handleSearchChange }
+              onInput={ handleSearchChange }
+              placeholder='Giphy search...'
+          />
+          { isGettingData && <Loading /> }
+      </div>
   );
 }

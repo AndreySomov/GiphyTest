@@ -1,9 +1,10 @@
 .lds-facebook {
     display: inline-block;
     position: absolute;
-    width: 64px;
-    height: 64px;
-    top: -20px;
+    right: 50px;
+    top: 12px;
+    width: 32px;
+    height: 32px;
   }
 
 .lds-facebook div {
@@ -33,7 +34,7 @@
 @keyframes lds-facebook {
     0% {
         top: 6px;
-        height: 51px;
+        height: 52px;
     }
     50%, 100% {
         top: 19px;

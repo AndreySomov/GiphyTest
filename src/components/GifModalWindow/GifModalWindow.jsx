@@ -14,8 +14,9 @@ export default function GifModalWindow({ open, onClose, modalInfo }) {
     card: {
       maxWidth: 500,
       position: "absolute",
-      top: "35%",
-      right: "45%",
+      top: '35%',
+      left: '40%',
+      textAlign: 'center',
     },
     media: {
       height: 200,
@@ -26,7 +27,6 @@ export default function GifModalWindow({ open, onClose, modalInfo }) {
 
   return (
     <div>
-      <p>Click to get the full Modal experience!</p>
       <Modal
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"

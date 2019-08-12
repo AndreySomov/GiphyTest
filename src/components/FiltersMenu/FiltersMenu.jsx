@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import './filtersMenu.scss';
 
 
-export default function FiltersMenu({ handleCountChange, handleMaxCountChange, countValue, maxCountValue }) {
+export default function FiltersMenu({ handleCountChange, handleMaxCountChange, chunkSize, maxCountValue }) {
 
   const useStyles = makeStyles(theme => ({
     container: {
@@ -27,7 +27,6 @@ export default function FiltersMenu({ handleCountChange, handleMaxCountChange, c
 
   return (
     <div className="inputs-container" >
-
       <TextField
         id="outlined-helperText"
         label="Max gif count"
@@ -40,12 +39,12 @@ export default function FiltersMenu({ handleCountChange, handleMaxCountChange, c
 
       <TextField
         id="outlined-helperText"
-        label="Gif count"
+        label="Gif chunk size"
         className={ classes.textField }
         margin="normal"
         variant="outlined"
         onChange={ handleCountChange }
-        value={ countValue }
+        value={ chunkSize }
       />
     </div>
   );

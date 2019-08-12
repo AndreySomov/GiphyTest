@@ -11,64 +11,84 @@ export default class Main extends React.PureComponent {
 
     this.state = {
       searchRequest: '',
+      autoCompleteValues: [],
       isGettingData: false,
-      // isContentOver: false,
-      // isConnectionErr: false,
-      // countValue: 40,
-      // maxCountValue: 1000,
+      chunkSize: 50,
+      maxCountValue: 1000,
     }
   }
 
-
-  handleSearchChange = (event) => {
+  handleSearchChange = (event, data) => {
+    console.log(event, data);
     const newSearchRequest = event.target.value;
     const { searchRequest } = this.state;
-  
     clearInterval(this.timer);
 
+    if(newSearchRequest === searchRequest) return;
+
     this.timer = setTimeout( () => {
-    
-      if(newSearchRequest === searchRequest) return;
 
-      this.setState({ searchRequest: newSearchRequest });
+      let requests = localStorage.getItem('requests');
 
-    }, 500);
+      requests = requests ? JSON.parse(requests) : [];
+
+      if(!requests.includes(newSearchRequest)) {
+        requests.push( newSearchRequest );
+        if(requests.length > 20) requests.shift();
+        localStorage.setItem('requests', JSON.stringify(requests));
+      }
+
+      this.setState({
+        searchRequest: newSearchRequest,
+        autoCompleteValues: requests,
+      });
+    }, 1000);
   }
 
-  // handleCountChange = (event) => {
-  //   const value = event.target.value;
-  //   const count = +value.replace(/[^0-9]/, '');
+  toggleGettingData = () => {
+      const { isGettingData } = this.state;
+      this.setState({ isGettingData: !isGettingData });
+  }
 
-  //   this.setState({countValue: Math.max(1, count)});
-  // }
+  handleChunkSizeChange = (event) => {
+    const value = event.target.value;
+    const count = value.replace(/[^0-9.]/g, '');
 
-  // handleMaxCountChange = (event) => {
-  //   const value = event.target.value;
-  //   const count = +value.replace(/[^0-9]/, '');
+    this.setState({ chunkSize: count });
+  }
 
-  //   this.setState({maxCountValue: Math.max(1, count)});
-  // }
+  handleMaxCountChange = (event) => {
+    const value = event.target.value;
+    const count = value.replace(/[^0-9]/g, '');
+
+    this.setState({ maxCountValue: count });
+  }
 
   render() {
-    const { searchRequest, isGettingData, isContentOver, countValue, maxCountValue } = this.state;
+    const { searchRequest, isGettingData, chunkSize, maxCountValue, autoCompleteValues } = this.state;
 
     return (
       <div className="main">
-        <SearchInput 
+        <SearchInput
+          searchRequest={ searchRequest }
           handleSearchChange={ this.handleSearchChange } 
           isGettingData={ isGettingData }
+          autoCompleteValues={ autoCompleteValues }
         />
 
         <FiltersMenu 
-          handleCountChange={ this.handleCountChange }
+          handleCountChange={ this.handleChunkSizeChange }
           handleMaxCountChange={ this.handleMaxCountChange }
-          countValue={ countValue }
+          chunkSize={ chunkSize }
           maxCountValue={ maxCountValue }
         />
 
         <GifContainer
           searchRequest={ searchRequest }
-          isContentOver={ isContentOver }
+          isGettingData={ isGettingData }
+          toggleGettingData={ this.toggleGettingData }
+          chunkSize={ chunkSize }
+          maxCountValue={ maxCountValue }
           key={ searchRequest }
         />
       </div>

@@ -1,4 +1,17 @@
-.search-input-container{
-    width: 40%;
-    font-size: 25px;
+.searchInput-container{
+    width: 300px;
+    margin: 20px;
+    z-index: 2;
+
+    .search-input{
+        display: block;
+        width: 300px;
+        margin: 20px;
+        height: 35px;
+        font-size: 25px;
+    }
+
+    .css-1wa3eu0-placeholder{
+        width: 300px;
+    }
 }

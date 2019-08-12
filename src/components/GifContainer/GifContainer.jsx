@@ -2,7 +2,6 @@ import React from 'react';
 import GifCard from '../GifCard/GifCard';
 import GifModalWindow from '../GifModalWindow/GifModalWindow';
 import NoMoreGifs from '../NoMoreGifs/NoMoreGifs';
-import Loading from '../Loading/Loading';
 import giphyRequest from '../../http/giphyRequest';
 import constants from '../../constants';
 import key from 'weak-key';
@@ -13,32 +12,27 @@ import './gifContainer.scss';
 
 
 export default class GifContainer extends React.PureComponent {
-
   constructor(props) {
     super(props);
 
     this.state = {
       searchData: [],
-      isGettingData: false,
-      isModalOpen: false,
-      modalInfo: {},
+      modalInfo: null,
+      isContentOver: false,
     }
 
     this.giphyOffset = 0;
-    this.total_count = 0;
-    this.slider = React.createRef();
-    this.isDown = false;
+    this.gifLimit = 40;
   }
 
-  async componentDidMount() {
-    const { searchRequest } = this.props;
-    const newData = await this.getData(searchRequest);
+  componentDidMount() {
+    const {searchRequest} = this.props;
 
-    this.setState({
-      searchData: newData.data,
-    });
+    if(searchRequest){
+      this.getData(searchRequest)
+          .then(data => this.setState({ searchData: data.data }));
+    }
   }
-
 
   extractData(data) {
     const { title, images, import_datetime, source, images: {preview_gif: { width, height }}, rating } = data;
@@ -60,100 +54,83 @@ export default class GifContainer extends React.PureComponent {
 
 
     if (gifId) {
-      this.setState({
-        isModalOpen: true,
-        modalInfo: searchData[gifId],
-      });
+      this.setState({ modalInfo: searchData[ gifId ] });
     }
   }
 
   handleScroll = async (event) => {
     const { searchRequest, isGettingData } = this.props;
     const { searchData } = this.state;
-    const slider = this.slider.current;
+    const slider = event.target;
     const topOffset = slider.scrollHeight - slider.scrollTop;
     const scrHeight = document.documentElement.clientHeight;
 
     if (topOffset < scrHeight * 2 && !isGettingData) {
       const newData = await this.getData(searchRequest);
-
+      if(!newData) return;
       this.setState({ searchData: searchData.concat(newData.data) });
     }
   }
 
-  handleClose = () => {
-    this.setState({ isModalOpen: false });
-  }
-
-  toggleGettingData = () => {
-    const { isGettingData } = this.state;
-    this.setState({ isGettingData: !isGettingData });
+  handleModalClose = () => {
+    this.setState({ modalInfo: null });
   }
 
   getData = async (request) => {
-    const { countValue, maxCountValue } = this.state;
-    const { isGettingData } = this.props;
-    if(isGettingData) return;
-    const url = `${constants.giphyDomain}.${request}&api_key=${constants.APIKey}&limit=${50}&offset=${this.giphyOffset}`;
+    const { isContentOver } = this.state;
+    const { isGettingData, toggleGettingData, maxCountValue, chunkSize } = this.props;
 
-    this.toggleGettingData();
+    if(isGettingData || isContentOver ) return;
+
+    const url = `${ constants.giphyDomain }.${request}&api_key=${ constants.APIKey }&limit=${ chunkSize }&offset=${ this.giphyOffset }`;
+
+    toggleGettingData();
   
     const data = await giphyRequest(url);
 
-    this.toggleGettingData();
+    toggleGettingData();
 
-    this.giphyOffset += countValue;
-    this.total_count = Math.min(data.pagination.total_count, maxCountValue);
+    this.giphyOffset += +chunkSize;
+    this.gifLimit = Math.min(data.pagination.total_count, maxCountValue);
+
+    if(this.giphyOffset >= this.gifLimit ) this.setState({ isContentOver: true });
 
     return data;
   }
 
   render() {
-    const { isContentOver } = this.props;
-    const { isModalOpen, modalInfo, searchData, isGettingData } = this.state;
-
-    const masonryOptions = {
-      transitionDuration: 0
-    };
-
-    const imagesLoadedOptions = { background: '.my-bg-image-el' }
+    const { isModalOpen, modalInfo, searchData, isContentOver } = this.state;
 
     return (
       <div
         className="gif-container"
         onClick={ this.handleClick }
         onScroll={ this.handleScroll }
-        ref={ this.slider }
       >
         <Masonry
           className={'my-gallery-class'}
           elementType={'ul'}
-          options={masonryOptions}
+          options={{ transitionDuration: 0 }}
           disableImagesLoaded={false}
           updateOnEachImageLoad={false}
-          imagesLoadedOptions={imagesLoadedOptions}
+          imagesLoadedOptions={ { background: '.my-bg-image-el' } }
         >   
           {searchData.map((data, i) =>  
               <li key={key(data)} >
-                <GifCard 
-                  data={this.extractData(data)} 
-                  id={i} 
-                />
+                <GifCard data={this.extractData(data)} id={i} />
               </li> )
           }
         </Masonry>
     
-        {isContentOver && <NoMoreGifs />}
+        { isContentOver && <NoMoreGifs />}
 
-        {isModalOpen && 
+        { !!modalInfo &&
           <GifModalWindow
-            open={ isModalOpen }
-            onClose={ this.handleClose }
+            open={ !!modalInfo }
+            onClose={ this.handleModalClose }
             modalInfo={ this.extractData(modalInfo) }
           />
         }
-
-        <Loading />
       </div>
     )
   }

@@ -4,7 +4,7 @@ import './noMoreGifs.scss';
 export default function NoMoreGifs() {
   return (
     <div className="no-more-gifs-text">
-        <span>No more gifs =(</span>
+        <span>No more gifs for you =(</span>
     </div>
   );
 }
