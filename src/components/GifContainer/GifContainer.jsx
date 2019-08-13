@@ -99,7 +99,7 @@ export default class GifContainer extends React.PureComponent {
   }
 
   render() {
-    const { isModalOpen, modalInfo, searchData, isContentOver } = this.state;
+    const { modalInfo, searchData, isContentOver } = this.state;
 
     return (
       <div
